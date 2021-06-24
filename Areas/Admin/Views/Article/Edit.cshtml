@@ -1,0 +1,94 @@
+﻿@model EditViewModel
+@{
+    if (Model.Article.Id != default)
+    {
+        ViewData["Title"] = "Редактирование статьи";
+    }
+    else
+    {
+        ViewData["Title"] = "Создание статьи";
+    }
+
+    string tagsName = "";
+    foreach (var TagName in Model.Tags)
+    {
+        tagsName += TagName + ",";
+
+    }
+    tagsName = tagsName.Remove(tagsName.Length - 1);
+}
+
+<script src="~/lib/ckeditor/ckeditor.js"></script>
+
+<p class="h1 text-center">@ViewData["Title"]</p>
+
+<div class="col-md-offset-3 col-md-6 m-md-auto">
+    <form method="post" asp-area="Admin" asp-controller="Article" asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Article.Id" />
+        <input type="hidden" asp-for="Article.DateAdd" />
+        <input type="hidden" asp-for="Article.Author" value=@User.Identity.Name />
+
+        <div class="form-group">
+            <label asp-for="Article.Title"></label>
+            <input type="text" class="form-control" asp-for="Article.Title">
+            <span asp-validation-for="Article.Title"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Article.ShortDescription"></label>
+            <input type="text" class="form-control" asp-for="Article.ShortDescription">
+            <span asp-validation-for="Article.ShortDescription"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Article.TitleImagePath"></label>
+            <input type="file" onchange="onFileSelected(event)" name="titleImageFile" />
+            <div>
+                <img class="img-block" id="titleImage" style="background-size:cover; width:600px; height:500px;" src="~/images/@Model.Article.TitleImagePath">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Article.CategoryId"></label>
+            <select asp-for="Article.CategoryId" asp-items="Model.Categoryes" class="form-control">
+                <option selected="selected" disabled="disabled">Выберите категорию</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Теги (указывайте через запятую!)</label>
+            <input type="text" name="TagsStr" class="form-control" value="@tagsName">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Article.Content"></label>
+            <textarea asp-for="Article.Content"></textarea>
+            <span asp-validation-for="Article.Content"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Сохранить изменения</button>
+            <a class="btn btn-danger" asp-area="Admin" asp-controller="Home" asp-action="Articles">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<script>
+      window.onload = function() {
+                    var newCKEdit = CKEDITOR.replace('@Html.IdFor(x=>x.Article.Content)');
+                    newCKEdit.updateElement();
+                }
+
+                function onFileSelected(event) {
+                    var selectedFile = event.target.files[0];
+                var reader = new FileReader();
+
+                var imgtag = document.getElementById("titleImage");
+                imgtag.title = selectedFile.name;
+
+        reader.onload = function (event) {
+                    imgtag.src = event.target.result;
+                };
+
+        reader.readAsDataURL(selectedFile);
+    }
+</script>

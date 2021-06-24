@@ -1,0 +1,85 @@
+﻿@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Главная страница";
+}
+
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+</style>
+
+<section class="section">
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <div class="page-wrapper">
+                    <div class="blog-list clearfix">
+                        @foreach (var article in Model.Articles)
+                        {
+                            <div class="blog-box row">
+                                <div class="col-md-4">
+                                    <div class="post-media">
+                                        <a asp-controller="Article" asp-action="Index" asp-route-id="@article.Id">
+                                            <img src="~/images/@article.TitleImagePath" alt="" class="img-fluid">
+                                            <div class="hovereffect"></div>
+                                        </a>
+                                    </div><!-- end media -->
+                                </div><!-- end col -->
+
+                                <div class="blog-meta big-meta col-md-8">
+                                    <h4><a asp-controller="Article" asp-action="Index" asp-route-id="@article.Id">@article.Title</a></h4>
+                                    <p>@article.ShortDescription</p>
+                                    <small class="firstsmall"><a class="bg-orange" asp-controller="Home" asp-action="ArticlesByCategory" asp-route-categoryID="@article.Category.Id">@article.Category.Name</a></small>
+                                    <small><a href="" title="">@article.DateAdd</a></small>
+                                    <small><a href="" title="">@article.Author</a></small>
+                                </div><!-- end meta -->
+                            </div><!-- end blog-box -->
+
+                            <hr class="invis">
+                        }
+                        @if (Model.PageViewModel.HasPreviousPage)
+                        {
+                            <a asp-action="Index"
+                               asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+                               class="btn btn-outline-dark">
+                                <i class="glyphicon glyphicon-chevron-left"></i>
+                                Назад
+                            </a>
+                        }
+                        @if (Model.PageViewModel.HasNextPage)
+                        {
+                            <a asp-action="Index"
+                               asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+                               class="btn btn-outline-dark">
+                                Вперед
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </a>
+                        }
+                    </div><!-- end blog-list -->
+                </div><!-- end page-wrapper -->   
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
+</section>

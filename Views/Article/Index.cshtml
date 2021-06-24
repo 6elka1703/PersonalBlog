@@ -1,0 +1,107 @@
+﻿@model ArticleViewModel
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Главная страница";
+}
+
+<section class="section single-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="page-wrapper">
+                    <div class="blog-title-area text-center">
+                        <span class="color-orange"><a asp-controller="Home" asp-action="ArticlesByCategory" asp-route-categoryID="@Model.Article.Category.Id">@Model.Article.Category.Name</a></span>
+
+                        <h3>@Model.Article.Title</h3>
+
+                        <div class="blog-meta big-meta">
+                            <small><a href="tech-single.html" title="">@Model.Article.DateAdd</a></small>
+                            <small><a href="tech-author.html" title="">@Model.Article.Author</a></small>
+                        </div><!-- end meta -->
+                    </div><!-- end title -->
+
+                    <div class="single-post-media">
+                        <img src="~/images/@Model.Article.TitleImagePath" alt="" class="img-fluid">
+                    </div><!-- end media -->
+
+                    <div class="blog-content">
+                        @Html.Raw(Model.Article.Content)
+                    </div><!-- end content -->
+
+                    <div class="blog-title-area">
+                        <div class="tag-cloud-single">
+                            <span>Tags</span>
+                            @foreach (var TagName in Model.Tags)
+                            {
+                                <small><a asp-controller="Home" asp-action="ArticlesByTag" asp-route-tag="@TagName">@TagName</a></small>
+                            }
+                        </div><!-- end meta -->
+                    </div><!-- end title -->
+
+                    <div class="custombox clearfix">
+                        <h4 class="small-title">@Model.Comments.Count() Comments</h4>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="comments-list">
+                                    @foreach (var comment in Model.Comments)
+                                    {
+                                        <div class="media">
+                                            <a class="media-left" href="#">
+                                                <img src="~/upload/author.jpg" alt="" class="rounded-circle">
+                                            </a>
+                                            <div class="media-body">
+                                                <h4 class="media-heading user_name">@comment.Author<small>@comment.DateAdd</small></h4>
+                                                <p>@comment.CommentText</p>
+                                                <a href="#" class="btn btn-primary btn-sm">Reply</a>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end custom-box -->
+
+                    <hr class="invis1">
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="custombox clearfix">
+                            <h4 class="small-title">Leave a Reply</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form class="form-wrapper" method="post" asp-controller="Article" asp-action="Comment">
+                                        <input type="hidden" name="Id" />
+                                        <input type="hidden" name="ArticleId" value="@Model.Article.Id"/>
+                                        <input type="hidden" name="Author" value="@User.Identity.Name" />
+
+                                        <div class="form-group">
+                                            <textarea class="form-control" placeholder="Your comment" name="CommentText"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Comment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="custombox clearfix">
+                            <h4 class="small-title">Leave a Reply</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p class="p-3 text-center h2">Чтобы оставлять комментарии необходимо авторизоваться!</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div><!-- end page-wrapper -->
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
+</section>

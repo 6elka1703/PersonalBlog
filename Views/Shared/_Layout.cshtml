@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{Html.RenderPartialAsync("_MettaTagsPartial");}
+
+    <title>@ViewData["Title"]</title>
+
+    @{Html.RenderPartialAsync("_CssPartial");}
+
+    <link rel="shortcut icon" href="~/images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="~/images/apple-touch-icon.png">
+</head>
+<body>
+
+    @{Html.RenderPartialAsync("_HeaderPartial");}
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @{Html.RenderPartialAsync("_FooterPartial");}
+
+    @{Html.RenderPartialAsync("_ScriptsPartial");}
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

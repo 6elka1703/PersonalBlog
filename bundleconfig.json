@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "wwwroot/css/bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/css/bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/colors.min.css",
+    "inputFiles": [
+      "wwwroot/css/colors.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/version/tech.min.css",
+    "inputFiles": [
+      "wwwroot/css/version/tech.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/responsive.min.css",
+    "inputFiles": [
+      "wwwroot/css/responsive.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/style.min.css",
+    "inputFiles": [
+      "wwwroot/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/custom.min.js",
+    "inputFiles": [
+      "wwwroot/js/custom.js"
+    ]
+  }
+]

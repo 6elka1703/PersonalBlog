@@ -1,0 +1,45 @@
+﻿@model IQueryable<Article>
+@{
+    ViewData["Title"] = "Управление статьями";
+}
+
+<p class="h1 text-center">@ViewData["Title"]</p>
+
+<div class="container" style="margin-bottom:15px">
+    <a class="btn btn-primary" asp-area="Admin" asp-controller="Article" asp-action="Edit">Добавить статью</a>
+</div>
+
+<p class="h3 text-center">Список статей</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Статья</th>
+            <th>Дата создания</th>
+            <th>Автор</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-area="" asp-controller="Article" asp-action="Index" asp-route-id="@article.Id">
+                        @($"{article.Title}")
+                    </a>
+                </td>
+                <td>@article.DateAdd</td>
+                <td>@article.Author</td>
+                <td><a asp-area="Admin" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id">Редактировать</a></td>
+                <td><a asp-area="Admin" asp-controller="Article" asp-action="Delete" asp-route-id=@article.Id>Удалить</a></td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+
+
+

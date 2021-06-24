@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Административная панель";
+}
+
+<p class="h1 text-center">@ViewData["Title"]</p>
+
+<div class="list-group">
+    <a class="list-group-item" asp-area="Admin" asp-controller="Home" asp-action="Articles">Управление статьями</a>
+    <a class="list-group-item" asp-area="Admin" asp-controller="Home" asp-action="Categoryes">Управление категориями</a>
+    <a class="list-group-item" asp-area="Admin" asp-controller="Home" asp-action="Comments">Управление комментариями</a>
+    <a class="list-group-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Управление пользователями</a>
+</div>
+
