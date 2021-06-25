@@ -15,7 +15,8 @@
         tagsName += TagName + ",";
 
     }
-    tagsName = tagsName.Remove(tagsName.Length - 1);
+    if(tagsName.Length != 0)
+        tagsName = tagsName.Remove(tagsName.Length - 1);
 }
 
 <script src="~/lib/ckeditor/ckeditor.js"></script>
