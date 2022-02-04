@@ -10,8 +10,8 @@ namespace PersonalBlog.Models
     {
     
         public Article Article { get; set; }
-        public IQueryable<string> Tags { get; set; }
-        public IQueryable<Comment> Comments { get; set; }
+        public IList<string> Tags { get; set; }
+        public IList<Comment> Comments { get; set; }
 
     }
 }

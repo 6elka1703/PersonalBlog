@@ -11,7 +11,7 @@ namespace PersonalBlog.Areas.Admin.Models
     {
         public Article Article { get; set; }
         public SelectList Categoryes { get; set; }
-        public IQueryable<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
 
     }
 }

@@ -17,9 +17,9 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
             this.context = context;
         }
 
-        public IQueryable<Article> GetArticles()
+        public IList<Article> GetArticles()
         {
-            return context.Articles.Include(x => x.Category);
+            return context.Articles.Include(x => x.Category).ToList();
         }
 
         public Article GetArticleById(int Id)
@@ -28,28 +28,21 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
                 .FirstOrDefault(p => p.Id == Id);
         }
 
-        public IQueryable<Article> GetArticlesBySelectionField(string SelectionField, object value)
+        public IList<Article> GetArticlesByIdList(List<int> listId)
         {
-            if(value.GetType() == typeof(List<int>))
-            {
-                return context.Articles
-                        .FromSqlRaw("SELECT * FROM Articles WHERE " + SelectionField + "in(" + value.ToString() + ")")
-                        .Include(x => x.Category);
-            }
-            else
-            {
-                return context.Articles
-                        .FromSqlRaw("SELECT * FROM Articles WHERE " + SelectionField + " = " + value)
-                        .Include(x => x.Category);
-            }
-            
-           
+            return context.Articles.Include(x => x.Category).Where(p => listId.Contains(p.Id)).ToList();  
+        }
+
+        public IList<Article> GetArticlesByCategoryId(int id)
+        {
+            return context.Articles.Include(x => x.Category).Where(p => p.CategoryId == id).ToList();
         }
 
         public void SaveArticle(Article article)
         {
             if(article.Id == default(int))
             {
+                article.DateAdd = DateTime.UtcNow;
                 context.Entry(article).State = EntityState.Added;
             }
             else

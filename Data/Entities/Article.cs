@@ -11,8 +11,6 @@ namespace PersonalBlog.Data.Entities
 {
     public class Article
     {
-        private readonly UserManager<IdentityUser> _userManager;
-
         public int Id { get; set; }
         
         [Required(ErrorMessage = "Заполните заголовок")]
@@ -25,7 +23,7 @@ namespace PersonalBlog.Data.Entities
 
         [DataType(DataType.Date)]
         [Display(Name = "Дата создания")]
-        public DateTime DateAdd { get; }
+        public DateTime DateAdd { get; set; }
 
         [Required(ErrorMessage = "Заполните автора")]
         [Display(Name = "Автор")]
@@ -43,12 +41,6 @@ namespace PersonalBlog.Data.Entities
         public int CategoryId { get; set; }
 
         public Category Category { get; set; }
-
-        public Article()
-        {
-            DateAdd = DateTime.UtcNow;  
-           
-        }
 
     }
 }

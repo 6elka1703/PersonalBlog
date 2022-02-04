@@ -9,8 +9,8 @@ namespace PersonalBlog.Data.DataAccessComponents.Interfaces
 {
     public interface IArticleWithTags
     {
-        IQueryable<string> GetTagsByArticleId(int id);
-        List<int> GetArticlesIdByTagName(string tagName);
+        IList<string> GetTagsByArticleId(int id);
+        IList<int> GetArticlesIdByTagName(string tagName);
 
         void SaveTags(List<ArticleWithTags> tags);
 

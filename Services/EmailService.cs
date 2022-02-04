@@ -19,7 +19,7 @@ namespace PersonalBlog.Services
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", config["EmailSettings:email"]));
+            emailMessage.From.Add(new MailboxAddress("Администрация сайта Personal Blog", config["EmailSettings:email"]));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)

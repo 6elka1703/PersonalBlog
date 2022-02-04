@@ -938,6 +938,10 @@ div.tab button:hover {
     font-weight: 500;
 }
 
+#CommentText:focus {
+    border-color: #ff9610;
+}
+
 .comments-list p {
     margin-bottom: 1rem
 }
@@ -955,7 +959,7 @@ div.tab button:hover {
 
 .comments-list .media {
     padding: 1rem;
-    margin-bottom: 15px;
+    border: 1px solid #eceeef
 }
 
 .media-body .btn-primary {
@@ -1008,7 +1012,7 @@ div.tab button:hover {
 
 .custombox {
     position: relative;
-    padding: 3rem 2rem;
+    padding: 3rem 0.5rem;
     border: 1px dashed #dadada;
 }
 

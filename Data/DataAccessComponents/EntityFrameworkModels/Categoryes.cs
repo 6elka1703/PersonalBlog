@@ -17,9 +17,9 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
             this.context = context;
         }
 
-        public IQueryable<Category> GetCategoryes()
+        public IList<Category> GetCategoryes()
         {
-            return context.Categories.Include(x => x.Articles);
+            return context.Categories.Include(x => x.Articles).ToList();
         }
 
         public Category GetCategoryById(int Id)

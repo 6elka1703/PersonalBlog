@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Data.DataAccessComponents.Interfaces;
 using PersonalBlog.Data.Entities;
+using Microsoft.Data.SqlClient;
 
 namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
 {
@@ -17,19 +18,27 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
             this.context = context;
         }
 
-        public IQueryable<Comment> GetComments()
+        public IList<Comment> GetComments()
         {
-            return context.Comments.Include(x => x.Article);
+            return context.Comments.Include(x => x.Article).Include(x => x.Author).ToList();
         }
 
-        public IQueryable<Comment> GetCommentsBySelectionField(string SelectionField, object value)
+        public IList<Comment> GetCommentsByArticleId(int articleId)
         {
-            return context.Comments.FromSqlRaw("SELECT * FROM Comments WHERE " + SelectionField + " = " + value);
+            return context.Comments.Include(x => x.Author).Where(p => p.ArticleId == articleId).OrderBy(p => p.Id).ToList();
+        }
+
+        public IList<Comment> GetCommentsByAuthor(ApplicationUser author)
+        {
+            return context.Comments.Include(x => x.Article)
+                                   .Include(x => x.Author)
+                                   .Where(x => x.Author == author)
+                                   .ToList();
         }
 
         public Comment GetCommentById(int Id)
         {
-            return context.Comments.FirstOrDefault(p => p.Id == Id);
+            return context.Comments.Include(x => x.Author).FirstOrDefault(p => p.Id == Id);
         }
 
         public void SaveComment(Comment comment)

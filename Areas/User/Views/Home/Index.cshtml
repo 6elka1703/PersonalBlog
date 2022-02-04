@@ -1,0 +1,19 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<p class="h1 text-center">@ViewData["Title"]</p>
+
+<div class="container mb-5 text-center">
+    <img src="~/@Model.GetPhotoPath()" alt="" class="rounded-circle w-25">
+    <h3>@Model.UserName</h3>
+</div>
+
+<div class="list-group">
+    <a class="list-group-item" asp-area="" asp-controller="UserPersonalInfo" asp-action="Edit">Изменить личные данные</a>
+    <a class="list-group-item" asp-area="User" asp-controller="Home" asp-action="ChangePassword">Изменить пароль</a>
+    <a class="list-group-item" asp-area="User" asp-controller="Home" asp-action="Comments">Мои комментарии</a>
+</div>
+

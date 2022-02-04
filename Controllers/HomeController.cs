@@ -15,7 +15,6 @@ namespace PersonalBlog.Controllers
     {
         private const int PAGE_SIZE = 5;
 
-        
         private readonly DataManager dataManager;
         
         public HomeController(DataManager dataManager)
@@ -31,18 +30,19 @@ namespace PersonalBlog.Controllers
 
         public IActionResult ArticlesByCategory(int categoryID)
         {
-            var data = dataManager.Articles.GetArticlesBySelectionField("CategoryId", categoryID);
+            var data = dataManager.Articles.GetArticlesByCategoryId(categoryID);
             return View("Index", ViewModel(data));
         }
 
         public IActionResult ArticlesByTag(string tag)
         {
             var articlesId = dataManager.ArticleWithTags.GetArticlesIdByTagName(tag);
-            var data = dataManager.Articles.GetArticlesBySelectionField("Id", articlesId);
+            var data = dataManager.Articles.GetArticlesByIdList(articlesId.ToList());
+
             return View("Index", ViewModel(data));
         }
 
-        private IndexViewModel ViewModel(IQueryable<Article> data, int page = 1)
+        private IndexViewModel ViewModel(IList<Article> data, int page = 1)
         {
             var countArticles = data.Count();
             var items = data.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);

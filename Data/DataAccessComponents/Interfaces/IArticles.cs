@@ -8,8 +8,9 @@ namespace PersonalBlog.Data.DataAccessComponents.Interfaces
 {
     public interface IArticles
     {
-        IQueryable<Article> GetArticles();
-        IQueryable<Article> GetArticlesBySelectionField(string SelectionField, object value);
+        IList<Article> GetArticles();
+        IList<Article> GetArticlesByIdList(List<int> listId);
+        IList<Article> GetArticlesByCategoryId(int id);
         Article GetArticleById(int Id);
         void SaveArticle(Article article);
         void DeleteArticleById(int Id);

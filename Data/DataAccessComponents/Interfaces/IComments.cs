@@ -8,8 +8,9 @@ namespace PersonalBlog.Data.DataAccessComponents.Interfaces
 {
     public interface IComments
     {
-        IQueryable<Comment> GetComments();
-        IQueryable<Comment> GetCommentsBySelectionField(string SelectionField, object value);
+        IList<Comment> GetComments();
+        IList<Comment> GetCommentsByArticleId(int articleId);
+        IList<Comment> GetCommentsByAuthor(ApplicationUser author);
         Comment GetCommentById(int Id);
         void SaveComment(Comment comment);
         void DeleteCommentById(int Id);

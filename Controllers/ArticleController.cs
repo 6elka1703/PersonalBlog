@@ -27,7 +27,7 @@ namespace PersonalBlog.Controllers
             }
 
             var tags = dataManager.ArticleWithTags.GetTagsByArticleId(id);
-            var comments = dataManager.Comments.GetCommentsBySelectionField("ArticleId", id);
+            var comments = dataManager.Comments.GetCommentsByArticleId(id);
 
             ArticleViewModel viewModel = new ArticleViewModel
             {

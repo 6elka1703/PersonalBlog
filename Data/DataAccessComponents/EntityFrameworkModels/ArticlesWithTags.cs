@@ -16,14 +16,14 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
             this.context = context;
         }
 
-        public IQueryable<string> GetTagsByArticleId(int id)
+        public IList<string> GetTagsByArticleId(int id)
         {
             return (from t in context.ArticleWithTags
                     where t.ArticleId == id
-                    select t.TagName).Distinct();
+                    select t.TagName).Distinct().ToList();
         }
 
-        public List<int> GetArticlesIdByTagName(string tagName)
+        public IList<int> GetArticlesIdByTagName(string tagName)
         {
             return context.ArticleWithTags
                 .Where(x => x.TagName == tagName)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PersonalBlog.Areas.Admin.Models;
 using PersonalBlog.Data;
 using PersonalBlog.Data.Entities;
+using PersonalBlog.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,11 +52,8 @@ namespace PersonalBlog.Areas.Admin.Controllers
             {
                 if (titleImageFile != null)
                 {
-                    article.TitleImagePath = titleImageFile.FileName;
-                    using (var stream = new FileStream(Path.Combine(hostingEnvironment.WebRootPath, "images/", titleImageFile.FileName), FileMode.Create))
-                    {
-                        titleImageFile.CopyTo(stream);
-                    }
+                    StaticFilesService staticFilesService = new StaticFilesService(hostingEnvironment);
+                    article.TitleImagePath = staticFilesService.SaveFile(titleImageFile, "images/");                
                 }
                 dataManager.Articles.SaveArticle(article);
 

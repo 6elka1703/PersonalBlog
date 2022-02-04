@@ -1,11 +1,94 @@
 ﻿@model ArticleViewModel
 
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Главная страница";
+}
+
+@functions
+{
+    public async Task RenderComments()
+    {
+        foreach (var comment in Model.Comments)
+        {
+            @if (comment.IdParentComment != 0) continue;
+
+            await RenderComment(comment, 0);
+
+            await RenderChildComments(comment.Id, 1);
+        }
+    }
+
+    public async Task RenderChildComments(int idParentComment, int nestLevel)
+    {
+        foreach (var comment in Model.Comments)
+        {
+            @if (@comment.IdParentComment == idParentComment)
+            {
+                await RenderComment(comment, nestLevel);
+                await RenderChildComments(comment.Id, nestLevel + 1);
+            }
+        }
+    }
+
+    public async Task RenderComment(Comment comment, int marginLeft)
+    {
+        String style = $"margin-left:{marginLeft * 10}px;text-align:left;";
+
+        <div class="media" style=@style>
+            <a class="media-left" href="#">
+                <img src="~/@comment.Author.GetPhotoPath() " alt="" class="rounded-circle">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading user_name">@comment.Author.UserName<small>@comment.DateAdd</small></h4>
+                <p>@comment.CommentText</p>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <input type="button" role="button" class="btn btn-primary btn-sm" value="Ответить" onclick="replyComment(@comment.Id)">
+                }
+            </div>
+        </div>
+    }
+
+    public async Task RenderCommentEditor()
+    {
+        @if (signInManager.IsSignedIn(User))
+        {
+            <div class="custombox clearfix">
+                <h4 class="small-title">Комментировать</h4>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form class="form-wrapper" method="post" asp-controller="Article" asp-action="Comment">
+                            <input type="hidden" name="Id" />
+                            <input type="hidden" name="IdParentComment" id="IdParentComment" />
+                            <input type="hidden" name="ArticleId" value="@Model.Article.Id" />
+                            <input type="hidden" name="AuthorId" value="@userManager.GetUserId(User)" />
+
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Комментарий" name="CommentText" id="CommentText"></textarea>
+                            </div>
+                            <button type="submit" role="button" class="btn btn-primary">Оставить комментарий</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="custombox clearfix">
+                <h4 class="small-title">Комментировать</h4>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="p-3 text-center h2">Чтобы оставлять комментарии необходимо авторизоваться!</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
 }
 
 <section class="section single-wrapper">
@@ -19,13 +102,13 @@
                         <h3>@Model.Article.Title</h3>
 
                         <div class="blog-meta big-meta">
-                            <small><a href="tech-single.html" title="">@Model.Article.DateAdd</a></small>
-                            <small><a href="tech-author.html" title="">@Model.Article.Author</a></small>
+                            <small><a href="#" title="">@Model.Article.DateAdd</a></small>
+                            <small><a href="#" title="">@Model.Article.Author</a></small>
                         </div><!-- end meta -->
                     </div><!-- end title -->
 
                     <div class="single-post-media">
-                        <img src="~/images/@Model.Article.TitleImagePath" alt="" class="img-fluid">
+                        <img src="~/@Model.Article.TitleImagePath" alt="" class="img-fluid">
                     </div><!-- end media -->
 
                     <div class="blog-content">
@@ -34,7 +117,7 @@
 
                     <div class="blog-title-area">
                         <div class="tag-cloud-single">
-                            <span>Tags</span>
+                            <span>Тэги</span>
                             @foreach (var TagName in Model.Tags)
                             {
                                 <small><a asp-controller="Home" asp-action="ArticlesByTag" asp-route-tag="@TagName">@TagName</a></small>
@@ -43,23 +126,12 @@
                     </div><!-- end title -->
 
                     <div class="custombox clearfix">
-                        <h4 class="small-title">@Model.Comments.Count() Comments</h4>
+                        <h4 class="small-title">Коментарии : @Model.Comments.Count()</h4>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="comments-list">
-                                    @foreach (var comment in Model.Comments)
-                                    {
-                                        <div class="media">
-                                            <a class="media-left" href="#">
-                                                <img src="~/upload/author.jpg" alt="" class="rounded-circle">
-                                            </a>
-                                            <div class="media-body">
-                                                <h4 class="media-heading user_name">@comment.Author<small>@comment.DateAdd</small></h4>
-                                                <p>@comment.CommentText</p>
-                                                <a href="#" class="btn btn-primary btn-sm">Reply</a>
-                                            </div>
-                                        </div>
-                                    }
+
+                                    @{await RenderComments();}
 
                                 </div>
                             </div><!-- end col -->
@@ -68,40 +140,28 @@
 
                     <hr class="invis1">
 
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <div class="custombox clearfix">
-                            <h4 class="small-title">Leave a Reply</h4>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <form class="form-wrapper" method="post" asp-controller="Article" asp-action="Comment">
-                                        <input type="hidden" name="Id" />
-                                        <input type="hidden" name="ArticleId" value="@Model.Article.Id"/>
-                                        <input type="hidden" name="Author" value="@User.Identity.Name" />
-
-                                        <div class="form-group">
-                                            <textarea class="form-control" placeholder="Your comment" name="CommentText"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit Comment</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="custombox clearfix">
-                            <h4 class="small-title">Leave a Reply</h4>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <p class="p-3 text-center h2">Чтобы оставлять комментарии необходимо авторизоваться!</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                    @{await RenderCommentEditor();}
 
                 </div><!-- end page-wrapper -->
             </div><!-- end col -->
         </div><!-- end row -->
     </div><!-- end container -->
 </section>
+
+<script>
+
+    function replyComment(idComment) {
+
+        $('#CommentText').focus();
+
+        $('#CommentText').show();
+        $('html,body').animate({
+            scrollTop: $('#CommentText').offset().top + "px"
+        }, {
+            duration: 1E3
+        });
+
+        $('#IdParentComment').attr('value', idComment);
+    }
+
+</script>

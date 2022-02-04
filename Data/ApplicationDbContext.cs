@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PersonalBlog.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -23,12 +23,12 @@ namespace PersonalBlog.Data
         {
             base.OnModelCreating(builder);
 
-            string UserID = Guid.NewGuid().ToString();
-            string RoleID = Guid.NewGuid().ToString();
+            string UserAdminID = Guid.NewGuid().ToString();
+            string RoleAdminID = Guid.NewGuid().ToString();
 
             builder.Entity<IdentityRole>().HasData(new IdentityRole
             {
-                Id = RoleID,
+                Id = RoleAdminID,
                 Name = "admin",
                 NormalizedName = "ADMIN"
             });
@@ -40,19 +40,20 @@ namespace PersonalBlog.Data
                 NormalizedName = "USER"
             });
 
-            builder.Entity<IdentityUser>().HasData(new IdentityUser { 
-                Id = UserID,
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            { 
+                Id = UserAdminID,
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "verxolazow@yandex.ru",
                 NormalizedEmail = "VERXOLAZOW@YANDEX.RU",
                 EmailConfirmed = true,
-                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "qwerty123")
+                PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "qwerty123")
             });
 
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { 
-                UserId = UserID,
-                RoleId = RoleID
+                UserId = UserAdminID,
+                RoleId = RoleAdminID
             });
 
         }

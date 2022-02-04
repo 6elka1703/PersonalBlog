@@ -44,7 +44,7 @@
             <label asp-for="Article.TitleImagePath"></label>
             <input type="file" onchange="onFileSelected(event)" name="titleImageFile" />
             <div>
-                <img class="img-block" id="titleImage" style="background-size:cover; width:600px; height:500px;" src="~/images/@Model.Article.TitleImagePath">
+                <img class="img-block" id="titleImage" style="background-size:cover; width:600px; height:500px;" src="~/@Model.Article.TitleImagePath">
             </div>
         </div>
 

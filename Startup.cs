@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using PersonalBlog.Data;
 using PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels;
 using PersonalBlog.Data.DataAccessComponents.Interfaces;
+using PersonalBlog.Data.Entities;
 
 namespace PersonalBlog
 {
@@ -28,7 +29,7 @@ namespace PersonalBlog
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireUppercase = false;

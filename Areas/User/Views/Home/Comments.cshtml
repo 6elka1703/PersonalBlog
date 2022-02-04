@@ -1,0 +1,40 @@
+﻿@model IList<Comment>
+@{
+    ViewData["Title"] = "Мои комментарии";
+}
+
+<p class="h1 text-center">@ViewData["Title"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Статья</th>
+            <th>Комментарий</th>
+            <th>Дата добавления</th>
+            <th>Автор</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-area="" asp-controller="Article" asp-action="Index" asp-route-id="@comment.Article.Id">
+                        @($"{comment.Article.Title}")
+                    </a>
+                </td>
+                <td>@comment.CommentText</td>
+                <td>@comment.DateAdd</td>
+                <td>@comment.Author</td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+
+
+

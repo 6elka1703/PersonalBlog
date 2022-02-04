@@ -8,7 +8,7 @@ namespace PersonalBlog.Data.DataAccessComponents.Interfaces
 {
     public interface ICategoryes
     {
-        IQueryable<Category> GetCategoryes();
+        IList<Category> GetCategoryes();
         Category GetCategoryById(int Id);
         void SaveCategory(Category category);
         void DeleteCategoryById(int Id);
