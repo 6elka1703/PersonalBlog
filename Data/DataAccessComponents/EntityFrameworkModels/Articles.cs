@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Data.DataAccessComponents.Interfaces;
 using PersonalBlog.Data.Entities;
+using PersonalBlog.Models;
 
 
 namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
@@ -22,6 +23,7 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
         {
             return context.Articles.Include(x => x.Category)
                                    .Include(x => x.Author)
+                                   .OrderByDescending(x => x.DateAdd)
                                    .ToList();
         }
 
@@ -30,6 +32,7 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
             return context.Articles.Include(x => x.Category)
                                    .Include(x => x.Author)
                                    .Where(x => x.Author == author)
+                                   .OrderByDescending(x => x.DateAdd)
                                    .ToList();
         }
 
@@ -44,14 +47,40 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
         {
             return context.Articles.Include(x => x.Category)
                                     .Include(x => x.Author)
-                                    .Where(p => listId.Contains(p.Id)).ToList();  
+                                    .Where(p => listId.Contains(p.Id))
+                                    .OrderByDescending(x => x.DateAdd).ToList();  
         }
 
         public IList<Article> GetArticlesByCategoryId(int id)
         {
             return context.Articles.Include(x => x.Category)
                                     .Include(x => x.Author)
-                                    .Where(p => p.CategoryId == id).ToList();
+                                    .Where(p => p.CategoryId == id)
+                                    .OrderByDescending(x => x.DateAdd).ToList();
+        }
+
+        public IList<Article> GetArticlesByArchive(DateTime dateArchive)
+        {
+            DateTime dateStart = new DateTime(dateArchive.Year, dateArchive.Month, 1);
+            DateTime dateEnd = new DateTime(dateArchive.Year, dateArchive.Month + 1, 1).AddDays(-1);
+
+            return context.Articles.Include(x => x.Category)
+                                    .Include(x => x.Author)
+                                    .Where(p => p.DateAdd >= dateStart && p.DateAdd <= dateEnd)
+                                    .OrderByDescending(x => x.DateAdd).ToList();
+        }
+
+        public IList<ArchivesViewModel> GetArchives()
+        {
+            var archives = context.Articles
+                  .GroupBy(i => new { i.DateAdd.Year, i.DateAdd.Month})
+                  .Select(g => new ArchivesViewModel
+                  {
+                      dateArchives = new DateTime(g.Key.Year, g.Key.Month, 1),
+                      viewArchives = $"{new DateTime(g.Key.Year, g.Key.Month, 1).ToString("Y")}"
+                  }).ToList();
+
+            return archives;
         }
 
         public void SaveArticle(Article article)

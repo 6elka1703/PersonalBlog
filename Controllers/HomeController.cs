@@ -55,6 +55,13 @@ namespace PersonalBlog.Controllers
             return View("Index", ViewModel(data));
         }
 
+        public IActionResult ArticlesByArchive(string dateArchiveStr)
+        {
+            DateTime dateArchive = DateTime.Parse(dateArchiveStr);
+            var data = dataManager.Articles.GetArticlesByArchive(dateArchive);
+            return View("Index", ViewModel(data));
+        }
+
         private IndexViewModel ViewModel(IList<Article> data, int page = 1)
         {
             var countArticles = data.Count();
@@ -64,8 +71,10 @@ namespace PersonalBlog.Controllers
             IndexViewModel indexViewModel = new IndexViewModel
             {
                 Articles = items,
-                PageViewModel = pageViewModel
-            };
+                PageViewModel = pageViewModel,
+                Categories = dataManager.Categoryes.GetCategoryes(),
+                Archives = dataManager.Articles.GetArchives()
+        };
 
             return indexViewModel;       
         }

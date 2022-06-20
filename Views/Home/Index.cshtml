@@ -32,8 +32,8 @@
 
 <section class="section">
     <div class="container">
-        <div class="row mt-3">
-            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="row mt-2" style="justify-content: space-between">
+            <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 content-main">
                 <div class="page-wrapper">
                     <div class="blog-list clearfix">
                         @foreach (var article in Model.Articles)
@@ -80,6 +80,27 @@
                     </div><!-- end blog-list -->
                 </div><!-- end page-wrapper -->   
             </div><!-- end col -->
+            <div class="col-lg-3 col-md-4 content-right">
+				 <div class="archives">
+					 <h3>Архивы</h3>
+					 <ul>
+					 @foreach (var archive in Model.Archives)
+                     {
+                        <li><a asp-controller="Home" asp-action="ArticlesByArchive" asp-route-dateArchiveStr="@archive.dateArchives">@archive.viewArchives</a></li>
+                     }
+					 </ul>
+				 </div>
+				 <div class="categories">
+					 <h3>Категории</h3>
+					 <ul>
+					 @foreach (var category in Model.Categories)
+                     {
+                        <li><a asp-controller="Home" asp-action="ArticlesByCategory" asp-route-categoryID="@category.Id">@category.Name</a></li>
+                     }
+					 </ul>
+				 </div>
+				 <div class="clearfix"></div>
+			  </div>
         </div><!-- end row -->
     </div><!-- end container -->
 </section>
