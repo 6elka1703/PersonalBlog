@@ -7,6 +7,7 @@ namespace PersonalBlog.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -45,6 +46,7 @@ namespace PersonalBlog.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
+           
 
             migrationBuilder.CreateTable(
                 name: "Categories",
@@ -306,10 +308,13 @@ namespace PersonalBlog.Migrations
                 name: "IX_Comments_ArticleId",
                 table: "Comments",
                 column: "ArticleId");
+
+             */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.DropTable(
                 name: "ArticleWithTags");
 
@@ -342,6 +347,7 @@ namespace PersonalBlog.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+        */
         }
     }
 }

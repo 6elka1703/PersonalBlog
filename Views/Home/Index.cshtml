@@ -53,7 +53,7 @@
                                     <p>@article.ShortDescription</p>
                                     <small class="firstsmall"><a class="bg-orange" asp-controller="Home" asp-action="ArticlesByCategory" asp-route-categoryID="@article.Category.Id">@article.Category.Name</a></small>
                                     <small><a href="" title="">@article.DateAdd</a></small>
-                                    <small><a href="" title="">@article.Author</a></small>
+                                    <small><a asp-controller="Home" asp-action="ArticlesByAuthor" asp-route-authorId="@article.AuthorId">@article.Author</a></small>
                                 </div><!-- end meta -->
                             </div><!-- end blog-box -->
 

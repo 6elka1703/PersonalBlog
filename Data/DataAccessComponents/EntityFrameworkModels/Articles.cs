@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Data.DataAccessComponents.Interfaces;
 using PersonalBlog.Data.Entities;
 
+
 namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
 {
     public class Articles : IArticles
@@ -19,23 +20,38 @@ namespace PersonalBlog.Data.DataAccessComponents.EntityFrameworkModels
 
         public IList<Article> GetArticles()
         {
-            return context.Articles.Include(x => x.Category).ToList();
+            return context.Articles.Include(x => x.Category)
+                                   .Include(x => x.Author)
+                                   .ToList();
+        }
+
+        public IList<Article> GetArticlesByAuthor(ApplicationUser author)
+        {
+            return context.Articles.Include(x => x.Category)
+                                   .Include(x => x.Author)
+                                   .Where(x => x.Author == author)
+                                   .ToList();
         }
 
         public Article GetArticleById(int Id)
         {
             return context.Articles.Include(x => x.Category)
+                .Include(x => x.Author)
                 .FirstOrDefault(p => p.Id == Id);
         }
 
         public IList<Article> GetArticlesByIdList(List<int> listId)
         {
-            return context.Articles.Include(x => x.Category).Where(p => listId.Contains(p.Id)).ToList();  
+            return context.Articles.Include(x => x.Category)
+                                    .Include(x => x.Author)
+                                    .Where(p => listId.Contains(p.Id)).ToList();  
         }
 
         public IList<Article> GetArticlesByCategoryId(int id)
         {
-            return context.Articles.Include(x => x.Category).Where(p => p.CategoryId == id).ToList();
+            return context.Articles.Include(x => x.Category)
+                                    .Include(x => x.Author)
+                                    .Where(p => p.CategoryId == id).ToList();
         }
 
         public void SaveArticle(Article article)

@@ -35,16 +35,6 @@ namespace PersonalBlog.Areas.Admin.Controllers
             return View(userManager.Users.ToList());
         }
 
-        public IActionResult Articles()
-        {
-            return View(dataManager.Articles.GetArticles());
-        }
-
-        public IActionResult Categoryes()
-        {
-            return View(dataManager.Categoryes.GetCategoryes());
-        }
-
         public IActionResult Comments()
         {
             return View(dataManager.Comments.GetComments());

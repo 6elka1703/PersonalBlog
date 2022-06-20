@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalBlog.Controllers
 {
@@ -16,10 +18,14 @@ namespace PersonalBlog.Controllers
         private const int PAGE_SIZE = 5;
 
         private readonly DataManager dataManager;
-        
-        public HomeController(DataManager dataManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public HomeController(DataManager dataManager, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.dataManager = dataManager;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
         }
 
         public IActionResult Index(int page = 1)
@@ -39,6 +45,13 @@ namespace PersonalBlog.Controllers
             var articlesId = dataManager.ArticleWithTags.GetArticlesIdByTagName(tag);
             var data = dataManager.Articles.GetArticlesByIdList(articlesId.ToList());
 
+            return View("Index", ViewModel(data));
+        }
+
+        public async Task<IActionResult> ArticlesByAuthor(string authorId)
+        {
+            var author = await _userManager.FindByIdAsync(authorId);
+            var data = dataManager.Articles.GetArticlesByAuthor(author);
             return View("Index", ViewModel(data));
         }
 

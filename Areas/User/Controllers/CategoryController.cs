@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
-namespace PersonalBlog.Areas.Admin.Controllers
+namespace PersonalBlog.Areas.User.Controllers
 {
-    [Area("Admin")]
+    [Area("User")]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly DataManager dataManager;
@@ -42,7 +44,7 @@ namespace PersonalBlog.Areas.Admin.Controllers
         public IActionResult Delete(int id)
         {
             var category = dataManager.Categoryes.GetCategoryById(id);
-            if(category.Articles.Count > 0)
+            if (category.Articles.Count > 0)
             {
                 return Content($"Невозможно удалить категорию - {category.Name}, т.к. есть статьи в этой категории.");
             }

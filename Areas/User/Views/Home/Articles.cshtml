@@ -6,7 +6,7 @@
 <p class="h1 text-center">@ViewData["Title"]</p>
 
 <div class="container" style="margin-bottom:15px">
-    <a class="btn btn-primary" asp-area="Admin" asp-controller="Article" asp-action="Edit">Добавить статью</a>
+    <a class="btn btn-primary" asp-area="User" asp-controller="Article" asp-action="Edit">Добавить статью</a>
 </div>
 
 <p class="h3 text-center">Список статей</p>
@@ -31,8 +31,8 @@
                 </td>
                 <td>@article.DateAdd</td>
                 <td>@article.Author</td>
-                <td><a asp-area="Admin" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id">Редактировать</a></td>
-                <td><a asp-area="Admin" asp-controller="Article" asp-action="Delete" asp-route-id=@article.Id>Удалить</a></td>
+                <td><a asp-area="User" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id">Редактировать</a></td>
+                <td><a asp-area="User" asp-controller="Article" asp-action="Delete" asp-route-id=@article.Id>Удалить</a></td>
             </tr>
         }
     </tbody>

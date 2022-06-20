@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PersonalBlog.Areas.Admin.Models;
+using PersonalBlog.Areas.User.Models;
 using PersonalBlog.Data;
 using PersonalBlog.Data.Entities;
 using PersonalBlog.Services;
@@ -11,26 +11,31 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
-namespace PersonalBlog.Areas.Admin.Controllers
+namespace PersonalBlog.Areas.User.Controllers
 {
-    [Area("Admin")]
+    [Area("User")]
+    [Authorize]
     public class ArticleController : Controller
     {
         private readonly DataManager dataManager;
         private readonly IWebHostEnvironment hostingEnvironment;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ArticleController(DataManager dataManager, IWebHostEnvironment hostingEnvironment)
+        public ArticleController(DataManager dataManager, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
         {
             this.dataManager = dataManager;
             this.hostingEnvironment = hostingEnvironment;
+            this.userManager = userManager;
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var article = id == default ? new Article() : dataManager.Articles.GetArticleById(id);
-           
+
             var categoryes = dataManager.Categoryes.GetCategoryes();
             var selectCategoryes = new SelectList(categoryes, "Id", "Name");
             var tags = dataManager.ArticleWithTags.GetTagsByArticleId(id);
@@ -46,21 +51,26 @@ namespace PersonalBlog.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Article article, IFormFile titleImageFile, String tagsStr)
+        public IActionResult Edit(Article article, IFormFile titleImageFile, string tagsStr)
         {
+            if(String.IsNullOrEmpty(article.AuthorId))
+            {
+                article.AuthorId = userManager.GetUserId(User);
+            }
+
             if (ModelState.IsValid)
             {
                 if (titleImageFile != null)
                 {
                     StaticFilesService staticFilesService = new StaticFilesService(hostingEnvironment);
-                    article.TitleImagePath = staticFilesService.SaveFile(titleImageFile, "images/");                
+                    article.TitleImagePath = staticFilesService.SaveFile(titleImageFile, "images/");
                 }
                 dataManager.Articles.SaveArticle(article);
 
                 var tags = tagsStr.Split(",");
 
                 List<ArticleWithTags> tagList = new List<ArticleWithTags>();
-                foreach(var tag in tags)
+                foreach (var tag in tags)
                 {
                     var articleWithTags = new ArticleWithTags
                     {

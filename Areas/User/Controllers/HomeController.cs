@@ -32,7 +32,7 @@ namespace PersonalBlog.Areas.User.Controllers
 
             return View(user);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
@@ -69,6 +69,24 @@ namespace PersonalBlog.Areas.User.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Articles()
+        {
+            if (User.IsInRole("admin"))
+            {
+                return View(dataManager.Articles.GetArticles());
+            }
+            else
+            {
+                var user = await _userManager.GetUserAsync(User);
+                return View(dataManager.Articles.GetArticlesByAuthor(user));
+            }            
+        }
+
+        public IActionResult Categoryes()
+        {
+            return View(dataManager.Categoryes.GetCategoryes());
         }
 
         [HttpGet]

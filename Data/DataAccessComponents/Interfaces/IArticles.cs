@@ -9,6 +9,7 @@ namespace PersonalBlog.Data.DataAccessComponents.Interfaces
     public interface IArticles
     {
         IList<Article> GetArticles();
+        IList<Article> GetArticlesByAuthor(ApplicationUser author);
         IList<Article> GetArticlesByIdList(List<int> listId);
         IList<Article> GetArticlesByCategoryId(int id);
         Article GetArticleById(int Id);

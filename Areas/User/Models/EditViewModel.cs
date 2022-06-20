@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PersonalBlog.Areas.Admin.Models
+namespace PersonalBlog.Areas.User.Models
 {
     public class EditViewModel
     {

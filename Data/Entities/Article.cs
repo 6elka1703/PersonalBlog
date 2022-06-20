@@ -25,9 +25,10 @@ namespace PersonalBlog.Data.Entities
         [Display(Name = "Дата создания")]
         public DateTime DateAdd { get; set; }
 
-        [Required(ErrorMessage = "Заполните автора")]
         [Display(Name = "Автор")]
-        public String Author { get; set; }
+        public ApplicationUser Author { get; set; }
+
+        public string AuthorId { get; set; }
 
         [Display(Name = "Титутульная картинка")]
         public String TitleImagePath { get; set; }
