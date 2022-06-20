@@ -54,10 +54,13 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="Article.CategoryId"></label>
-            <select asp-for="Article.CategoryId" asp-items="Model.Categoryes" class="form-control">
-                <option selected="selected" disabled="disabled">Выберите категорию</option>
-            </select>
+            <label asp-for="Article.CategoryId"></label>          
+            <div class="form-group" style="display:flex">
+                <select asp-for="Article.CategoryId" asp-items="Model.Categoryes" class="form-control">
+                    <option selected="selected" disabled="disabled">Выберите категорию</option>
+                </select>
+                <a class="btn btn-danger" style="font-size: 20px; padding: 0.4rem 1rem; margin-left: 5px;" asp-area="User" asp-controller="Category" asp-action="Edit">+</a>
+            </div>          
         </div>
 
         <div class="form-group">
